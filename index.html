@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кибер-штаб — квиз по кибербезопасности для студентов</title>
+<meta name="description" content="Отбей атаку мошенников: квиз по кибербезопасности для студентов. Проходи один: побеждает тот, кто отвечает верно и быстро.">
+<style>
+:root{
+  --bg:#0a1020; --bg2:#0f1830; --card:#131f3d; --line:#223356; --txt:#e8eefc; --mut:#93a3c7;
+  --acc:#2ee6a6; --acc2:#4cc9f0; --bad:#ff5d73; --warn:#ffc857; --r:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.55 -apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+  background-image:radial-gradient(900px 500px at 85% -5%,rgba(76,201,240,.16),transparent 60%),radial-gradient(700px 500px at -5% 20%,rgba(46,230,166,.10),transparent 60%);}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.15;margin:0}
+h2{font-size:clamp(26px,4vw,36px);margin-bottom:10px}
+.sec{padding:64px 0}
+.lead{color:var(--mut);max-width:640px;margin:0 0 28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font:600 16px/1 inherit;font-family:inherit;
+  padding:15px 24px;border-radius:12px;background:var(--acc);color:#04210f;text-decoration:none;transition:transform .12s,filter .12s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--acc2)}
+:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+
+nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);background:rgba(10,16,32,.8);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:800;letter-spacing:.3px;text-decoration:none}
+.logo b{color:var(--acc)}
+nav .links{display:flex;gap:22px;align-items:center}
+nav .links a{color:var(--mut);text-decoration:none;font-size:15px}
+nav .links a:hover{color:var(--txt)}
+nav .btn{padding:10px 16px;font-size:14px;color:#04210f!important}
+@media(max-width:700px){nav .links a:not(.btn){display:none}}
+
+.hero{padding:84px 0 56px}
+.tag{display:inline-block;font-size:13px;color:var(--acc);border:1px solid rgba(46,230,166,.4);padding:5px 12px;border-radius:99px;margin-bottom:20px;background:rgba(46,230,166,.07)}
+.hero h1{font-size:clamp(36px,7vw,64px);max-width:800px;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:19px;color:var(--mut);max-width:620px;margin:20px 0 32px}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 14px}
+.stat b{display:block;font-size:28px;color:var(--acc2);letter-spacing:-.02em}
+.stat span{font-size:13px;color:var(--mut);display:block;margin-top:4px;line-height:1.35}
+@media(max-width:860px){.stats{grid-template-columns:repeat(2,1fr)}.stat:last-child{grid-column:span 2}}
+
+.rounds{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.rcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.rcard .n{font-size:13px;color:var(--mut)}
+.rcard h3{font-size:19px;margin:6px 0 10px}
+.rcard .pt{display:inline-block;font-size:13px;font-weight:700;color:#04210f;background:var(--acc);padding:3px 10px;border-radius:99px}
+.rcard p{font-size:14px;color:var(--mut);margin:12px 0 0}
+
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.modes{grid-template-columns:1fr}}
+.mode{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.mode h3{font-size:21px;margin-bottom:10px}
+.mode ul{margin:0;padding-left:20px;color:var(--mut)}
+.mode li{margin:6px 0}
+
+/* play */
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,36px)}
+.hidden{display:none!important}
+label.f{display:block;font-weight:600;margin:0 0 8px}
+input[type=text]{width:100%;background:var(--bg);color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font:inherit;font-size:17px}
+input[type=text]:focus{outline:none;border-color:var(--acc2)}
+.hint{font-size:13px;color:var(--mut);margin-top:6px}
+.err{color:var(--bad);font-size:14px;margin-top:6px;min-height:20px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg button{background:var(--bg);color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:16px;font:600 16px inherit;font-family:inherit;cursor:pointer;text-align:left}
+.seg button small{display:block;font-weight:400;color:var(--mut);font-size:13px;margin-top:3px}
+.seg button[aria-pressed=true]{border-color:var(--acc);background:rgba(46,230,166,.09)}
+.row{margin-bottom:24px}
+.stepper{display:flex;gap:10px}
+.stepper button{flex:1;background:var(--bg);color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:14px;font:700 18px inherit;font-family:inherit;cursor:pointer}
+.stepper button[aria-pressed=true]{border-color:var(--acc2);background:rgba(76,201,240,.12);color:var(--acc2)}
+.members{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+@media(max-width:560px){.members{grid-template-columns:1fr}}
+
+.gh{display:flex;flex-wrap:wrap;gap:10px 18px;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:14px;color:var(--mut)}
+.gh b{color:var(--txt)}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 14px}
+.chip.timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--acc2);min-width:84px;text-align:center}
+.chip.timer.low{color:var(--bad);border-color:var(--bad)}
+.bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden;margin-bottom:24px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .3s}
+.qcard h3{font-size:clamp(20px,3.2vw,26px);line-height:1.3;margin:10px 0 22px}
+.qmeta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--mut)}
+.qmeta .pt{background:var(--acc);color:#04210f;font-weight:700;border-radius:99px;padding:2px 10px;font-size:13px}
+.cap{color:var(--warn);font-weight:600}
+.opts{display:grid;gap:10px}
+.opt{background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font:inherit;font-size:16px;text-align:left;cursor:pointer;transition:border-color .12s,background .12s}
+.opt:hover:not(:disabled){border-color:var(--acc2)}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--acc);background:rgba(46,230,166,.14)}
+.opt.no{border-color:var(--bad);background:rgba(255,93,115,.12)}
+.opts.tf{grid-template-columns:1fr 1fr}
+.opts.tf .opt{text-align:center;font-weight:700;font-size:18px;padding:22px}
+.fb{margin-top:18px;border-radius:14px;padding:16px 18px;border:1px solid var(--line);background:var(--card)}
+.fb.ok{border-color:var(--acc)}.fb.no{border-color:var(--bad)}
+.fb strong{display:block;margin-bottom:4px}
+.fb p{margin:0;color:var(--mut);font-size:15px}
+.fb .btn{margin-top:14px}
+.center{text-align:center}
+.big{font-size:clamp(22px,4vw,32px);margin:12px 0}
+.rank{font-size:clamp(28px,6vw,44px);font-weight:800;margin:6px 0 4px;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.res b{font-size:26px;display:block}
+.res span{font-size:13px;color:var(--mut)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--mut);font-weight:500;font-size:13px}
+td.num{font-variant-numeric:tabular-nums}
+.empty{color:var(--mut);padding:20px 0}
+.tablewrap{overflow-x:auto}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--mut);font-size:14px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="logo" href="#top">КИБЕР<b>-ШТАБ</b></a>
+  <div class="links"><a href="#rounds">Раунды</a><a href="#rules">Правила</a><a href="#top-list">Рейтинг</a><a class="btn" href="#play">Играть</a></div>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <span class="tag">Квиз для студентов · кибербезопасность</span>
+  <h1>Отбей <em>атаку мошенников</em> вместе со своим отделом</h1>
+  <p>5 раундов, 22 вопроса из реальных схем обмана: фишинг, взломы аккаунтов, «сотрудники банка», дипфейки. Проходи в своём темпе: побеждает тот, кто отвечает верно и быстро.</p>
+  <div class="cta"><a class="btn" href="#play">Начать игру →</a><a class="btn ghost" href="#rules">Как играть</a></div>
+</div></header>
+
+<section class="sec" style="padding-top:20px"><div class="wrap">
+  <div class="stats">
+    <div class="stat"><b>5,6 млрд</b><span>пользователей интернета в 2025 (68% населения Земли)</span></div>
+    <div class="stat"><b>89%</b><span>интернет-пользователей в России к 2025</span></div>
+    <div class="stat"><b>4 из 5</b><span>преступлений в 2024 в России совершено с использованием интернета</span></div>
+    <div class="stat"><b>300 млрд ₽</b><span>украли кибермошенники у россиян в 2024 году</span></div>
+    <div class="stat"><b>&gt;80%</b><span>инцидентов кибербезопасности начинается с фишинга</span></div>
+  </div>
+</div></section>
+
+<section class="sec" id="rounds"><div class="wrap">
+  <h2>5 раундов атаки</h2>
+  <p class="lead">Каждый раунд — новая волна мошенников. Чем сложнее атака, тем дороже ответ. Вопросы в одной игре не повторяются.</p>
+  <div class="rounds" id="roundCards"></div>
+</div></section>
+
+<section class="sec" id="rules"><div class="wrap">
+  <h2>Как играть</h2>
+  <p class="lead">Ты — «оперативный штаб», каждый раунд — «атака мошенников», которую нужно отбить.</p>
+  <div class="modes" style="grid-template-columns:1fr">
+    <div class="mode"><h3>🧑‍💻 Один на один с мошенниками</h3><ul>
+      <li>Отвечай в своём темпе, без таймера на вопрос.</li>
+      <li>Считается общее время, потраченное на ответы.</li>
+      <li>Выигрывает тот, у кого больше баллов и меньше времени.</li>
+    </ul></div>
+  </div>
+</div></section>
+
+<section class="sec" id="play"><div class="wrap">
+  <h2>Меню игры</h2>
+  <p class="lead">Введи название отдела (или свой ник) и начинай.</p>
+  <div class="panel">
+
+    <form id="setup" novalidate>
+      <div class="row">
+        <label class="f" for="teamName">Название команды или ник</label>
+        <input type="text" id="teamName" maxlength="24" placeholder="Например: Отдел «Не кликай»" autocomplete="off">
+        <div class="err" id="nameErr" role="alert"></div>
+      </div>
+      <button class="btn" type="submit">Запустить атаку →</button>
+    </form>
+
+    <div id="game" class="hidden" aria-live="polite">
+      <div class="gh">
+        <span class="chip" id="gTeam"></span>
+        <span class="chip">Баллы: <b id="gScore">0</b></span>
+        <span class="chip timer" id="gTimer">0:00</span>
+      </div>
+      <div class="bar"><i id="gBar"></i></div>
+      <div id="gBody"></div>
+    </div>
+
+    <div id="result" class="hidden center"></div>
+  </div>
+</div></section>
+
+<section class="sec" id="top-list"><div class="wrap">
+  <h2>Рейтинг на этом устройстве</h2>
+  <p class="lead">Сортировка: больше баллов, затем меньше времени.</p>
+  <div class="panel"><div class="tablewrap" id="board"></div>
+    <div style="margin-top:16px"><button class="btn ghost" id="clearBoard" type="button">Очистить рейтинг</button></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">Материал: презентация «Студентам о безопасности в цифровом мире». Рейтинг хранится только в вашем браузере.</div></footer>
+
+<script>
+"use strict";
+/* ---------- ДАННЫЕ ---------- */
+const TF=["Правда","Ложь"];
+const ROUNDS=[
+ {id:1,title:"Разминка «Верю — не верю»",pts:1,n:6,desc:"Правда или ложь? Быстрые факты о фишинге.",tf:true},
+ {id:2,title:"«Красные флаги»",pts:2,n:5,desc:"Найди признаки обмана в письмах и сообщениях."},
+ {id:3,title:"«Узнай схему»",pts:3,n:4,desc:"Определи, какая именно уловка перед тобой."},
+ {id:4,title:"«Что делать, если…»",pts:3,n:4,desc:"Правильные действия в момент атаки."},
+ {id:5,title:"Финал «Джекпот»",pts:5,n:3,desc:"Три вопроса на 5 баллов. Отвечают капитаны по очереди."}
+];
+// q — вопрос, o — варианты, a — индекс верного, w — пояснение
+const POOL={
+1:[
+ {q:"«Фишинг» происходит от англ. fishing — «рыбная ловля»: мошенники «выуживают» ваши данные.",o:TF,a:0,w:"Верно: фишинг — «выуживание» логинов, паролей и данных карт."},
+ {q:"Более 80% инцидентов кибербезопасности начинаются с фишинга.",o:TF,a:0,w:"Правда — фишинговая атака обычно первый шаг."},
+ {q:"В 2024 году кибермошенники украли у россиян около 300 млрд ₽.",o:TF,a:0,w:"Правда, около 300 млрд рублей."},
+ {q:"Сотрудник банка может позвонить первым и попросить код из СМС.",o:TF,a:1,w:"Ложь! Работники банка никогда не запрашивают PIN, CVV и коды из СМС."},
+ {q:"Оператор сам присылает СМС «срок договора истекает, срочно подтвердите операцию».",o:TF,a:1,w:"Ложь! Операторы связи не сообщают об истечении срока договора — это уловка."},
+ {q:"4 из 5 преступлений в России в 2024 году совершены с использованием интернета.",o:TF,a:0,w:"Правда: цифровая среда стала основной площадкой преступников."},
+ {q:"Техподдержка или бот в игре могут попросить у вас пароль от аккаунта.",o:TF,a:1,w:"Ложь! Техподдержка и боты в играх никогда не запрашивают пароли."},
+ {q:"Полиция может связаться с вами в мессенджере и назначить встречу по видеосвязи.",o:TF,a:1,w:"Ложь! Официальные лица и полиция не связываются в мессенджерах и не назначают встречу по ВКС."},
+ {q:"Любая просьба друга о деньгах в переписке должна быть подтверждена звонком или встречей.",o:TF,a:0,w:"Правда: аккаунт друга могли взломать."},
+ {q:"Если вас «выбросили» из аккаунта в мессенджере, лучше сразу удалить приложение со смартфона.",o:TF,a:1,w:"Ложь! Правило №1: приложение со смартфона не удалять!"},
+ {q:"Интернетом пользуются около 5,6 млрд человек — это 68% населения Земли.",o:TF,a:0,w:"Правда, данные на 2025 год."}
+],
+2:[
+ {q:"Письмо: «Добрый день, я сотрудник деканата. Перейдите по ссылке и авторизуйтесь для сдачи госэкзаменов». Что найдём?",o:["Красных флагов нет — обычное письмо","Минимум три: безличное обращение, давление срочностью, странная ссылка (+ проверить адрес отправителя)","Только один — ссылка","Подозрительно лишь если есть вложение"],a:1,w:"Безличное обращение, давление срочностью, странная ссылка — и обязательно проверить адрес отправителя."},
+ {q:"Друг пишет: «Я в беде! Кидай сюда 1000 р, потом объясню». Первое действие?",o:["Перевести, друг же в беде","Спросить «а что случилось?» в том же чате","Позвонить голосом и подтвердить — аккаунт могли взломать","Заблокировать друга"],a:2,w:"Любая просьба о деньгах подтверждается звонком или встречей."},
+ {q:"Какой признак почти всегда выдаёт фишинговое письмо?",o:["Письмо пришло утром","Ссылка в тексте не совпадает с реальным адресом перехода","В письме есть картинки","Письмо длиннее трёх абзацев"],a:1,w:"Наведите курсор на ссылку: реальный адрес часто совсем другой."},
+ {q:"«Вам в подарок Telegram Premium! Наберите код из СМС и пришлите». Что это?",o:["Акция от Telegram","Реклама оператора связи","Классический фишинг на кражу аккаунта","Баг в приложении"],a:2,w:"Код доступа — ключ к вашему аккаунту. Никому не сообщайте."},
+ {q:"Вложение «Расписание_сессии.pdf» — что должно насторожить?",o:["Название слишком обычное","Реальное расширение не совпадает с заявленным","Файл пришёл в понедельник","Слово «сессия» в названии"],a:1,w:"Включите отображение расширений: «.pdf.exe» — это вирус."},
+ {q:"Что НЕ является признаком фишингового письма?",o:["Отсутствие личного обращения","Странный адрес отправителя","В письме есть подпись и контактные данные организации","Давление: «срочно! вам грозит штраф!»"],a:2,w:"Признак обмана — как раз отсутствие подписи и контактных данных."},
+ {q:"Вам звонят по видео: лицо и голос «знакомого» просят срочно перевести деньги. Что это может быть?",o:["Дипфейк — подделка лица и голоса с помощью ИИ","Сбой связи","Ошибка алгоритма мессенджера","Реклама банка"],a:0,w:"Дипфейки убедительны. Перезвоните по обычному номеру или встретьтесь лично."},
+ {q:"Что НЕ входит в причины, почему мы верим мошенникам?",o:["Качественная имитация надёжных источников","Использование человеческих слабостей","Недостаточная осведомлённость и бдительность","Слишком сложные пароли"],a:3,w:"Верим из-за имитации, эмоций, незнания и невнимательности."}
+],
+3:[
+ {q:"«Вас беспокоит лейтенант Смирнов, на ваших родителей заведено уголовное дело». Что за схема?",o:["Настоящий вызов на допрос","Давление страхом — полиция не общается в мессенджерах","Рекламный звонок","Проверка данных оператором"],a:1,w:"Страх — главный инструмент мошенников. Положите трубку и перезвоните родителям."},
+ {q:"«Заработайте на своей банковской карте — просто пересылайте переводы». Это…",o:["Честная подработка","Партнёрская программа банка","Дропперство — соучастие в преступлении","Кэшбэк-сервис"],a:2,w:"Дроппер пересылает украденные деньги и сам становится соучастником."},
+ {q:"«Срок договора истекает, подтвердите операцию — сейчас придёт СМС». Цель мошенников?",o:["Продлить договор","Выудить код из СМС","Рассказать о тарифах","Проверить качество связи"],a:1,w:"Код из СМС = ключ к вашему аккаунту или деньгам."},
+ {q:"«Бесплатные кристаллы в игре на стороннем сайте». Что это?",o:["Подарок от разработчиков","Поддельное приложение: кража аккаунта и денег","Бета-тест","Партнёрская акция"],a:1,w:"Поддельные версии игр и скрытая оплата — частые ловушки."},
+ {q:"«Я курьер / из поликлиники. Сообщите информацию из СМС». Что происходит?",o:["Обычная доставка","Диспансеризация по полису","Схема выуживания кода из СМС","Опрос качества обслуживания"],a:2,w:"Курьерам и «поликлиникам» коды из СМС не нужны."},
+ {q:"«Выгодные инвестиции с огромным доходом — вложитесь сегодня!» Как относиться?",o:["Сомнительно — это типичная приманка","Безопасно, раз предлагают","Надёжно, если много лайков","Верить, если пишет «эксперт»"],a:0,w:"Слишком большой доход при малых усилиях — сигнал обмана."},
+ {q:"Предложение «легко заработать на фото и подрывах». Куда это ведёт?",o:["К хорошему доходу","К карьере в охране","В тюрьму, а не к достатку","К стажировке"],a:2,w:"Деньги за преступные задания — уголовная ответственность."}
+],
+4:[
+ {q:"Вас «выбросили» из мессенджера, но доступ с другого устройства есть. Что делать?",o:["Удалить приложение","Завершить все другие сеансы и включить 2FA","Ничего — само пройдёт","Сменить номер телефона"],a:1,w:"Завершите сеансы, включите двухфакторную аутентификацию. Правило №1: приложение со смартфона не удалять!"},
+ {q:"С карты списали деньги без вашего ведома. Что делать?",o:["Подождать пару дней","Заблокировать карту, выпустить новую, написать заявление в банк","Написать мошенникам","Удалить банковское приложение"],a:1,w:"Время решает: сразу блокируйте карту и идите в банк."},
+ {q:"Вы уже перевели деньги мошенникам. Что делать?",o:["Заявление в банк и полицию, отказ от сделок через МФЦ/Госуслуги, запрет кредитов на Госуслугах","Никому не говорить","Переводить ещё, чтобы вернуть","Только поменять пароль"],a:0,w:"Заявления в банк и полицию, отказ от сделок и запрет на кредиты."},
+ {q:"Вы потеряли смартфон. Что нужно сделать?",o:["Купить новый и забыть","Сменить пароли, удалить куки и историю, заблокировать и перевыпустить карты, сбросить до заводских","Только заблокировать SIM","Ждать, пока найдётся"],a:1,w:"Защитите аккаунты, карты и данные на устройстве."},
+ {q:"С вашего аккаунта рассылают сообщения, но доступ сохранён. Что делать?",o:["Закрыть аккаунт","Завершить другие сеансы и включить двухфакторную аутентификацию","Ничего","Отправить всем «меня взломали» и выйти"],a:1,w:"Сеансы — завершить, 2FA — включить."},
+ {q:"Доступ к аккаунту утерян полностью. Что делать?",o:["Создать десять новых аккаунтов","Удалить аккаунт через запрос в техподдержку","Заплатить за возврат","Ждать неделю"],a:1,w:"Через техподдержку сервиса. Приложение со смартфона не удаляем."}
+],
+5:[
+ {q:"Как расшифровывается CTF?",o:["Cyber Trust Force","Capture the Flag — командный «захват флага»","Control the Firewall","Critical Threat Filter"],a:1,w:"Командные соревнования по ИБ в условиях, близких к реальности."},
+ {q:"Что такое киберполигон?",o:["Склад старых компьютеров","Киберучения на примере виртуального государства","Антивирус для компаний","Хакерский форум"],a:1,w:"Специалисты по ИБ проверяют защищённость компаний из разных отраслей."},
+ {q:"Что входит в полный набор настроек безопасности устройства?",o:["Только антивирус","Антивирус, сложный пароль + 2FA, контроль push, удалённый сброс, отслеживание, приватность в соцсетях","Только пароль","Отключение интернета"],a:1,w:"Безопасность — это набор мер, а не одна кнопка."},
+ {q:"Что входит в базовый уровень защиты от Т2?",o:["Интеллектуальная блокировка звонков мошенников и антиспам для SMS","Платный антивирус Kaspersky","Геолокационный сервис «Где мои дети»","Дополнительные персонажи голосового ассистента"],a:0,w:"Остальное — платные дополнения для максимальной защиты."}
+]};
+const MAXPTS=ROUNDS.reduce((s,r)=>s+r.n*r.pts,0);
+const TEAM_SEC=15;
+const RANKS=[[.85,"Легенда кибербезопасности","🏆"],[.65,"Киберзащитник","🛡️"],[.4,"Стажёр-бдительный","🔍"],[0,"Свежая наживка","🎣"]];
+
+/* ---------- УТИЛИТЫ ---------- */
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const fmt=ms=>{const s=Math.round(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+const el=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e};
+
+/* ---------- КАРТОЧКИ РАУНДОВ ---------- */
+ROUNDS.forEach(r=>{const c=el("div","rcard");
+  c.append(el("div","n","Раунд "+r.id),el("h3",null,r.title));
+  const p=el("span","pt",r.pts+(r.pts===1?" балл":r.pts<5?" балла":" баллов"));c.append(p,el("p",null,r.desc+" Вопросов: "+r.n+"."));
+  $("roundCards").append(c)});
+
+/* ---------- МЕНЮ ---------- */
+$("setup").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("teamName").value.trim();
+  if(!name){$("nameErr").textContent="Введи название команды, чтобы начать.";$("teamName").focus();return}
+  $("nameErr").textContent="";
+  startGame(name,[]);
+});
+$("teamName").addEventListener("input",()=>$("nameErr").textContent="");
+
+/* ---------- НЕПОВТОРЯЮЩИЕСЯ ВОПРОСЫ ---------- */
+function buildQuestions(){
+  const seen=store.get("cq_seen",{});const out=[];
+  ROUNDS.forEach(r=>{
+    const pool=POOL[r.id].map((q,i)=>({...q,key:r.id+"-"+i}));
+    let s=new Set(seen[r.id]||[]);
+    let fresh=pool.filter(q=>!s.has(q.key));
+    if(fresh.length<r.n){s=new Set();fresh=pool}          // всё показано — начинаем новый цикл
+    const pick=shuffle(fresh).slice(0,r.n);
+    pick.forEach(q=>s.add(q.key));seen[r.id]=[...s];
+    pick.forEach(q=>{
+      // перемешиваем варианты, кроме «Правда/Ложь»
+      let o=q.o.map((t,i)=>({t,ok:i===q.a}));
+      if(!r.tf)o=shuffle(o);
+      out.push({round:r,q:q.q,o,w:q.w})
+    });
+  });
+  store.set("cq_seen",seen);return out;
+}
+
+/* ---------- ИГРА ---------- */
+let G=null,tick=null;
+function startGame(name,members){
+  G={name,members,team:members.length>0,qs:buildQuestions(),i:0,score:0,ok:0,time:0,t0:0,locked:true,bonus:0};
+  $("setup").classList.add("hidden");$("result").classList.add("hidden");$("game").classList.remove("hidden");
+  $("gTeam").textContent=(G.team?"👥 ":"🧑‍💻 ")+name;
+  $("gTimer").classList.toggle("hidden",false);
+  $("game").scrollIntoView({behavior:"smooth",block:"start"});
+  showQuestion();
+}
+function updateHud(){
+  $("gScore").textContent=G.score;
+  $("gBar").style.width=(G.i/G.qs.length*100)+"%";
+}
+function clearTick(){if(tick){clearInterval(tick);tick=null}}
+function showQuestion(){
+  clearTick();updateHud();
+  if(G.i>=G.qs.length){return showTwist()}
+  const q=G.qs[G.i],first=G.i===0||G.qs[G.i-1].round.id!==q.round.id;
+  const body=$("gBody");body.textContent="";
+  if(first){
+    const c=el("div","center");
+    c.append(el("div","tag","Раунд "+q.round.id+" из "+ROUNDS.length),el("h3","big",q.round.title),
+      el("p","lead",q.round.desc+" Каждый верный ответ — "+q.round.pts+" б."));c.lastChild.style.margin="0 auto 24px";
+    const b=el("button","btn","Поехали →");b.onclick=()=>drawQuestion(q);c.append(b);body.append(c);
+    $("gTimer").textContent=G.team?"0:"+TEAM_SEC:fmt(G.time);$("gTimer").classList.remove("low");
+    b.focus();
+  }else drawQuestion(q);
+}
+function drawQuestion(q){
+  const body=$("gBody");body.textContent="";
+  const card=el("div","qcard");
+  const meta=el("div","qmeta");
+  meta.append(el("span",null,"Раунд "+q.round.id+" · вопрос "+(G.i+1)+" из "+G.qs.length),el("span","pt","+"+q.round.pts));
+  if(G.team){const cap=G.members[G.i%G.members.length];const s=el("span","cap","Капитан: "+cap);meta.append(s)}
+  card.append(meta,el("h3",null,q.q));
+  const opts=el("div","opts"+(q.round.tf?" tf":""));
+  const btns=q.o.map((o,idx)=>{const b=el("button","opt",o.t);b.type="button";b.onclick=()=>answer(idx);opts.append(b);return b});
+  card.append(opts);body.append(card);
+  G.locked=false;G.t0=performance.now();G.btns=btns;
+  const tm=$("gTimer");tm.classList.remove("low");
+  if(G.team){
+    const upd=()=>{const left=TEAM_SEC*1000-(performance.now()-G.t0);
+      tm.textContent="0:"+String(Math.max(0,Math.ceil(left/1000))).padStart(2,"0");
+      tm.classList.toggle("low",left<=5000);
+      if(left<=0&&!G.locked)answer(-1)};
+    upd();tick=setInterval(upd,100);
+  }else{
+    const upd=()=>{tm.textContent=fmt(G.time+(performance.now()-G.t0))};
+    upd();tick=setInterval(upd,250);
+  }
+}
+function answer(idx){
+  if(G.locked)return;G.locked=true;clearTick();
+  const q=G.qs[G.i];G.time+=Math.min(performance.now()-G.t0,G.team?TEAM_SEC*1000:1e9);
+  const right=idx>=0&&q.o[idx].ok;
+  if(right){G.score+=q.round.pts;G.ok++}
+  G.btns.forEach((b,k)=>{b.disabled=true;if(q.o[k].ok)b.classList.add("ok");else if(k===idx)b.classList.add("no")});
+  const fb=el("div","fb "+(right?"ok":"no"));
+  fb.append(el("strong",null,right?"✅ Атака отбита! +"+q.round.pts:(idx<0?"⏱ Время вышло — 0 баллов":"❌ Мимо — 0 баллов")),el("p",null,q.w));
+  const last=G.i===G.qs.length-1;
+  const nb=el("button","btn",last?"К финалу →":"Дальше →");nb.type="button";nb.onclick=()=>{G.i++;showQuestion()};
+  fb.append(nb);G.btns[0].closest(".qcard").append(fb);nb.focus();
+  $("gScore").textContent=G.score;
+}
+function showTwist(){
+  clearTick();$("gBar").style.width="100%";
+  const body=$("gBody");body.textContent="";
+  const c=el("div","center");
+  c.append(el("div","tag","Финальный твист"),el("h3","big","Какой совет из презентации вы нарушали на этой неделе?"),
+    el("p","lead","Например: один пароль на всё, переход по ссылке из письма, коды из СМС. Честное признание приносит +1 балл."));
+  c.lastChild.style.margin="0 auto 24px";
+  const a=el("div","actions"),y=el("button","btn","Честно признаюсь (+1)"),n=el("button","btn ghost","Я идеален(а)");
+  y.onclick=()=>{G.bonus=1;G.score+=1;finish()};n.onclick=finish;a.append(y,n);c.append(a);body.append(c);
+  $("gTimer").textContent=G.team?"—":fmt(G.time);y.focus();
+}
+
+/* ---------- ИТОГИ И РЕЙТИНГ ---------- */
+function rankFor(score){const p=Math.min(score,MAXPTS)/MAXPTS;return RANKS.find(r=>p>=r[0])}
+function finish(){
+  $("game").classList.add("hidden");
+  const rk=rankFor(G.score);
+  const r=$("result");r.textContent="";r.classList.remove("hidden");
+  r.append(el("div","tag",G.team?"Отдел «"+G.name+"»":"Игрок «"+G.name+"»"),el("div","rank",rk[2]+" "+rk[1]),
+    el("p","lead","Атака завершена. Вот как справился штаб:"));r.lastChild.style.margin="0 auto";
+  const res=el("div","res");
+  [[G.score+" / "+MAXPTS,"баллов"+(G.bonus?" (с бонусом)":"")],[G.ok+" / "+G.qs.length,"верных ответов"],[fmt(G.time),"время на ответы"]].forEach(([b,s])=>{
+    const d=el("div");d.append(el("b",null,b),el("span",null,s));res.append(d)});
+  r.append(res);
+  const act=el("div","actions");
+  const again=el("button","btn","Сыграть ещё раз");again.onclick=()=>{r.classList.add("hidden");$("setup").classList.remove("hidden");$("setup").scrollIntoView({behavior:"smooth"})};
+  const share=el("button","btn ghost","Скопировать результат");
+  share.onclick=async()=>{const t=`${rk[2]} «${G.name}» — ${rk[1]}: ${G.score}/${MAXPTS} баллов, ${G.ok}/${G.qs.length} верно, ${fmt(G.time)}. Сможешь лучше? Квиз по кибербезопасности.`;
+    try{await navigator.clipboard.writeText(t);share.textContent="Скопировано ✓"}catch(e){share.textContent="Не удалось скопировать"}};
+  act.append(again,share);r.append(act);
+  const list=store.get("cq_board",[]);
+  list.push({n:G.name,t:G.team?G.members.length:1,s:G.score,ok:G.ok,ms:Math.round(G.time),rk:rk[1],d:Date.now()});
+  list.sort((a,b)=>b.s-a.s||a.ms-b.ms);store.set("cq_board",list.slice(0,10));
+  renderBoard();
+  r.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function renderBoard(){
+  const list=store.get("cq_board",[]);const b=$("board");b.textContent="";
+  if(!list.length){b.append(el("div","empty","Пока пусто. Сыграй первым!"));return}
+  const t=el("table"),h=el("tr");["#","Команда","Состав","Баллы","Время","Звание"].forEach(x=>h.append(el("th",null,x)));t.append(h);
+  list.forEach((x,i)=>{const tr=el("tr");[i+1,x.n,x.t>1?x.t+" чел.":"соло",x.s,fmt(x.ms),x.rk].forEach((v,k)=>tr.append(el("td",k===3||k===4?"num":null,String(v))));t.append(tr)});
+  b.append(t);
+}
+$("clearBoard").onclick=()=>{if(confirm("Очистить рейтинг на этом устройстве?")){store.set("cq_board",[]);renderBoard()}};
+renderBoard();
+</script>
+</body>
+</html>
